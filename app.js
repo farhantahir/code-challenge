@@ -3,7 +3,17 @@
  */
 
 const express = require('express');
+const config = require('config');
 const app = express();
+
+/**
+ * Add request logger(morgan) based on environment settings.
+ */
+if (config.logger) {
+  app.use(config.logger);
+}
+
+
 
 // Body Parsing middleware settings.
 app.use(express.json());
