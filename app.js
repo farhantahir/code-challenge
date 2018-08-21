@@ -29,6 +29,12 @@ app.use(function (req, res, next) {
 });
 
 /**
+ * Loading the application source code defined in src.
+ */
+require('./src')(app);
+
+
+/**
  * Global middleware to catch 404 errors.
  */
 app.use(function (req, res, next) {
