@@ -16,17 +16,14 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
  * Set NODE_CONFIG_DIR for config module to load envrionment configurations.
  */
 process.env["NODE_CONFIG_DIR"] = __dirname + '/../config/';
+const config = require('config');
 
 /**
  * Getting noOfCores available from available cpus
  */
 const noOfCores = os.cpus().length;
 
-
-/**
- * @todo Instead of adding process.env.NODE_ENV, use configuration to detect environment.
- */
-if (process.env.NODE_ENV === 'production' && cluster.isMaster) {
+if (config.Fork_Children && cluster.isMaster) {
   console.info(`[Master] Total cores: ${noOfCores}`);
   [...Array(noOfCores)].forEach(() => cluster.fork());
 } else {
