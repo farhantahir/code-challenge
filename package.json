@@ -4,6 +4,8 @@
   "description": "Code Challenge for Back-End developer position by tajawal",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon bin/www.js",
+    "start": "node bin/www.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -21,5 +23,8 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
   }
 }
