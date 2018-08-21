@@ -1,0 +1,19 @@
+{
+  "name": "code-challenge",
+  "version": "1.0.0",
+  "description": "Code Challenge for Back-End developer position by tajawal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "code-challenge",
+    "tajawal",
+    "restful",
+    "apis",
+    "search",
+    "engine"
+  ],
+  "author": "Farhan Tahir",
+  "license": "ISC"
+}
