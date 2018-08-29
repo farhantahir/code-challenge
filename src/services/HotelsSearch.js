@@ -11,8 +11,8 @@ class HotelsSearch {
    * @constructor
    * @property {object} searchEngine Object of SearchEngine Service   
    */
-  constructor() {    
-    this.searchEngine = new SearchEngine();        
+  constructor() {
+    this.searchEngine = new SearchEngine();
     const { STRING, NUMBER, ARRAY_OF_OBJECTS } = this.searchEngine.fieldTypes;
     this.fields = {
       name: { type: STRING },
@@ -27,15 +27,15 @@ class HotelsSearch {
    * Sets Fields on Search Engine for Hotels Search
    */
   setSearchEngineFields() {
-      this.searchEngine.setFields(this.fields);
-  } 
+    this.searchEngine.setFields(this.fields);
+  }
 
   /**
    * Fetches hotels' data using HOTES_API_URI and request module.   
    */
   async fetchHotels() {
     let response = await request(config.Hotels_API_URL);
-    response = JSON.parse(response); 
+    response = JSON.parse(response);
     return response.hotels || [];
   }
 
@@ -45,8 +45,29 @@ class HotelsSearch {
    */
   async search() {
     const hotels = await this.fetchHotels();
-    console.log(hotels, 'hotels')
-    return hotels;
+    this.searchEngine.addData(hotels);
+    /**
+     * Following filters are only for testing and runing
+     * further code
+     */
+    const OPTS = this.searchEngine.OPTS;
+    const testFilters = {
+      name: {
+        opt: OPTS.regex,
+        val: 'One'
+      },
+      city: {
+        opt: OPTS.eq,
+        val: 'dubai'
+      },
+      price: {
+        opt: OPTS.btwe,
+        val: [7, 200]
+      }
+    };
+    const filteredHotes = this.searchEngine.search(testFilters);
+    console.log(filteredHotes, 'hotels')
+    return filteredHotes;
   }
 }
 
