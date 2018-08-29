@@ -2,7 +2,7 @@
  * Hotels Controller Class
  */
 
-const HotelsSearch = require('../services/hotelsSearch');
+const HotelsSearch = require('../services/HotelsSearch');
 class HotelsController {
 
   /**

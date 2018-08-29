@@ -1,18 +1,34 @@
 const request = require('request-promise-native');
 const config = require('config');
-const SearchEngine = require('./searchEngine');
+const SearchEngine = require('./SearchEngine');
 
 /**
  * class for Hotels Search service
  */
 class HotelsSearch {
-  /**
-   * Constructor
+
+  /**   
+   * @constructor
    * @property {object} searchEngine Object of SearchEngine Service   
    */
   constructor() {    
     this.searchEngine = new SearchEngine();        
+    const { STRING, NUMBER, ARRAY_OF_OBJECTS } = this.searchEngine.fieldTypes;
+    this.fields = {
+      name: { type: STRING },
+      city: { type: STRING },
+      price: { type: NUMBER },
+      availability: { type: ARRAY_OF_OBJECTS, multiValue: true }
+    };
+    this.setSearchEngineFields();
   }
+
+  /**
+   * Sets Fields on Search Engine for Hotels Search
+   */
+  setSearchEngineFields() {
+      this.searchEngine.setFields(this.fields);
+  } 
 
   /**
    * Fetches hotels' data using HOTES_API_URI and request module.   
