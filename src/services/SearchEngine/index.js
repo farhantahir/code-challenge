@@ -22,8 +22,8 @@ class SearchEngine {
    */
   setFields(fields = {}) {
     this.fields = Object.keys(fields).reduce((obj, fieldName) => {
-      const { type, mapKey, multiValue } = fields[fieldName];
-      obj[fieldName] = new Field(fieldName, type, mapKey, multiValue);
+      const { type, multiValue } = fields[fieldName];
+      obj[fieldName] = new Field(fieldName, type, multiValue);
       return obj;
     }, {});
   }

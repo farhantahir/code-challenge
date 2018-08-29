@@ -11,10 +11,9 @@ class Field {
    * @param {string} mapKey Key that maps on document object.      
    * @param {boolean} multiValue To determine if field is array or not
    */
-  constructor(name, type, mapKey, multiValue = false) {
+  constructor(name, type, multiValue = false) {
     this.name = name;
-    this.type = FIELD_TYPES[type] || FIELD_TYPES.STRING;
-    this.mapKey = mapKey || this.name;
+    this.type = FIELD_TYPES[type] || FIELD_TYPES.STRING;    
     this.multiValue = multiValue;
   }
 
