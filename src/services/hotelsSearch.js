@@ -1,6 +1,6 @@
 const request = require('request-promise-native');
 const config = require('config');
-const SearchEngine = require('../searchEngine');
+const SearchEngine = require('./searchEngine');
 
 /**
  * class for Hotels Search service
