@@ -57,79 +57,88 @@ class SearchEngine {
    * @param {object} filters 
    */
   filterRecord(filters) {
-    const OPTS = this.OPTS;
-    return function (record) {
+    const fields = this.fields;
+    return (record) => {
       let isMatch = true;
       for (let field of Object.keys(filters)) {
-        const { opt, val } = filters[field];
-
-        /**
-         * Assumption:
-         * If any of the following filter mathces set isMatch = true and  return
-         */
-
-        /**
-         * If filter operator is set to eq
-         */
-        if (opt === OPTS.eq) {
-          if (COM_OPTS.eq(val, record[field])) continue;
+        const match = this.applyFilters(field, filters, record);
+        if (match)
+          continue;
+        else
           isMatch = false;
-          break;
-        }
-
-
-        /**
-         * If filter operator is set to gt
-         */
-        if (opt === OPTS.gt) {
-          if (COM_OPTS.gt(record[field], val)) continue;
-          isMatch = false;
-          break;
-        }
-
-        /**
-         * If filter operator is set to lt
-         */
-        if (opt === OPTS.lt) {
-          if (COM_OPTS.lt(record[field], val)) continue;
-          isMatch = false;
-          break;
-        }
-
-
-
-        /**
-         * If filter operator is set to btw
-         */
-        if (opt === OPTS.btw) {
-          if (COM_OPTS.btw(record[field], val[0], val[1])) continue;
-          isMatch = false;
-          break;
-        }
-
-
-        /**
-         * If filter operator is set to btwe
-         */
-        if (opt === OPTS.btwe) {
-          if (COM_OPTS.btwe(record[field], val[0], val[1])) continue;
-          isMatch = false;
-          break;
-        }
-
-
-        /**
-         * If filter operator is set to regex
-         */
-        if (opt === OPTS.regex) {
-          if (COM_OPTS.regex(record[field], val)) continue;
-          isMatch = false;
-          break;
-        }
+        break;
       }
-
       return isMatch;
     };
+  }
+
+  /**
+   * Applies provided filters on a given field and record.
+   * @param {string} field
+   * @param {object} filters
+   * @param {object} record
+   */
+  applyFilters(field, filters, record) {
+    /**
+     * Assumption:
+     * If any of the following filter mathces set isMatch = true and  return
+     */
+
+    const OPTS = this.OPTS;
+    const { opt, val } = filters[field];
+
+    /**
+     * If filter operator is set to eq
+     */
+    if (opt === OPTS.eq) {
+      if (COM_OPTS.eq(val, record[field])) return true;
+      return false;
+    }
+
+
+    /**
+     * If filter operator is set to gt
+     */
+    if (opt === OPTS.gt) {
+      if (COM_OPTS.gt(record[field], val)) return true;
+      return false;
+    }
+
+    /**
+     * If filter operator is set to lt
+     */
+    if (opt === OPTS.lt) {
+      if (COM_OPTS.lt(record[field], val)) return true;
+      return false;
+    }
+
+
+
+    /**
+     * If filter operator is set to btw
+     */
+    if (opt === OPTS.btw) {
+      if (COM_OPTS.btw(record[field], val[0], val[1])) return true;
+      return false;
+    }
+
+
+    /**
+     * If filter operator is set to btwe
+     */
+    if (opt === OPTS.btwe) {
+      if (COM_OPTS.btwe(record[field], val[0], val[1])) return true;
+      return false;
+    }
+
+
+    /**
+     * If filter operator is set to regex
+     */
+    if (opt === OPTS.regex) {
+      if (COM_OPTS.regex(record[field], val)) return true;
+      return false;
+    }
   }
 }
 
