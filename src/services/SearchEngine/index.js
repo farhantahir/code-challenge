@@ -61,12 +61,76 @@ class SearchEngine {
     return (record) => {
       let isMatch = true;
       for (let field of Object.keys(filters)) {
-        const match = this.applyFilters(field, filters, record);
+        /**
+         * If field is not defined already 
+         * or 
+         * It is not a Field object don't apply filters
+         */
+        if (!fields[field] || !fields[field] instanceof Field) continue;
+
+        let match = true;
+
+        /**
+         * If field type is STRING or NUMBER simply run applyFilter on value and field
+         */
+        if (
+          fields[field].type === this.fieldTypes.STRING
+          || fields[field].type === this.fieldTypes.NUMBER
+        ) {
+          match = this.applyFilters(field, filters, record);
+        }
+
+        /**
+         * If filed type is ARRAY_OF_OBJECTS
+         * Then filter format is as follow.
+         * availability: {
+         *  from: {
+         *    opt: OPTS.eq,
+         *    val: '20-10-2019'
+         *  },
+         *  to:{
+         *    opt: OPTS.eq,
+         *    val: '20-12-2019'
+         *  }
+         * }
+         * 
+         * Get nested filds array using Object.keys iterate through each filterKey
+         * get nested record that is array of objects
+         * Run each record through applyFilter
+         * break if nestedMatch is true
+         * TODO: As breaking the loop if one record found, this should be a config on filter object
+         * like match: single or multi
+         */
+        if (fields[field].type === this.fieldTypes.ARRAY_OF_OBJECTS) {
+          const nestedFilters = filters[field];
+          const nestedRecords = record[field];
+          const nestedMatch = nestedRecords.find((nestedRecord) => {
+            let isNestedMatch = true;
+            for (let nestedField of Object.keys(nestedFilters)) {
+              const nestedMatch = this.applyFilters(nestedField, nestedFilters, nestedRecord);
+              if (!nestedMatch) {
+                isNestedMatch = false;
+                break;
+              }
+            }
+            return isNestedMatch;
+          });
+
+          /**
+           * If one match is found on nested objects set match = true
+           */
+          if (!nestedMatch)
+            match = false;
+
+        }
+
         if (match)
           continue;
-        else
+        else {
           isMatch = false;
-        break;
+          break;
+        }
+
       }
       return isMatch;
     };

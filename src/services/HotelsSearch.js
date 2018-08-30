@@ -44,8 +44,6 @@ class HotelsSearch {
    * @returns {Promise}
    */
   async search() {
-    const hotels = await this.fetchHotels();
-    this.searchEngine.addData(hotels);
     /**
      * Following filters are only for testing and runing
      * further code
@@ -63,8 +61,20 @@ class HotelsSearch {
       price: {
         opt: OPTS.btwe,
         val: [7, 200]
+      },
+      availability: {
+        from: {
+          opt: OPTS.eq,
+          val: '10-10-2020'
+        },
+        to: {
+          opt: OPTS.eq,
+          val: '15-10-2020'
+        }
       }
     };
+    const hotels = await this.fetchHotels();
+    this.searchEngine.addData(hotels);
     const filteredHotes = this.searchEngine.search(testFilters);
     console.log(filteredHotes, 'hotels')
     return filteredHotes;
