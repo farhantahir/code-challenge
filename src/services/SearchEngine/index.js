@@ -200,7 +200,7 @@ class SearchEngine {
      * If filter operator is set to regex
      */
     if (opt === OPTS.regex) {
-      if (COM_OPTS.regex(record[field], val)) return true;
+      if (COM_OPTS.regex(record[field].toLowerCase(), val.toLowerCase())) return true;
       return false;
     }
   }
