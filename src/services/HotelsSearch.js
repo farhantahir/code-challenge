@@ -83,7 +83,7 @@ class HotelsSearch {
        * Run range filter otherwise run greater filter
        */
       const priceFilter = filters['price'].split(':');
-      if (priceFilter.length > 1) {
+      if (priceFilter[0] && preparedFilter[1]) {
         preparedFilters['price'] = {
           opt: OPTS.btwe,
           val: [
@@ -91,21 +91,18 @@ class HotelsSearch {
             priceFilter[1]
           ]
         };
-      } else {
-        preparedFilters['price'] = {
-          opt: OPTS.gt,
-          val: priceFilter[0]
-        };
       }
     }
 
+    /**
+     * Preparing Hotel Availability Filter
+     */
     if (filters['date']) {
       /**
-       * Split date by : if more than two values like 10-10-2020:15-10-2020 are provided
-       * Run range filter otherwise run greater filter
+       * Split date by :
        */
       const dateFilter = filters['date'].split(':');
-      if (dateFilter.length > 1) {
+      if (dateFilter[0] && dateFilter[1]) {
         preparedFilters['availability'] = {
           from: {
             opt: OPTS.eq,
@@ -115,13 +112,6 @@ class HotelsSearch {
             opt: OPTS.eq,
             val: dateFilter[1]
           },
-        };
-      } else {
-        preparedFilters['availability'] = {
-          from: {
-            opt: OPTS.gt,
-            val: dateFilter[0]
-          }
         };
       }
     }
