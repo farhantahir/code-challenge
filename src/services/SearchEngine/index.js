@@ -1,6 +1,7 @@
 const Field = require('./Field');
 const FIELD_TYPES = require('./fieldTypes');
 const COM_OPTS = require('./com_opts');
+const { sort } = require('../../utilities');
 /**
  * Class for SearchEngine Service
  */
@@ -16,7 +17,12 @@ class SearchEngine {
   constructor() {
     this.records = [];
     this.fields = {};
+    this.sortFields = [];
     this.fieldTypes = FIELD_TYPES;
+    this.sortOrders = {
+      asc: 'asc',
+      desc: 'desc'
+    };
     this.OPTS = Object.keys(COM_OPTS).reduce((opts, opt) => {
       opts[opt] = opt;
       return opts;
@@ -36,6 +42,14 @@ class SearchEngine {
   }
 
   /**
+   * sets sort fields for Search Engine
+   * @param {array} fields Array of sort fieds
+   */
+  setSortFields(fields = []) {
+    this.sortFields = fields;
+  }
+
+  /**
    * Add Data to Search Engine
    * @param {array} data
    */
@@ -46,10 +60,12 @@ class SearchEngine {
   /**
    * Searches records by processing them through filterRecord method 
    * @param {object} filters { fieldName: { opt: 'opt', val } }
+   * @param {object} sort { fieldName: 'asc' or 'desc' }
    * @returns {array} Array of filtered records
    */
-  search(filters) {
-    return this.records.filter(this.filterRecord(filters));
+  search(filters, sort) {
+    const filteredRecords = this.records.filter(this.filterRecord(filters));
+    return this.applySort(filteredRecords, sort);
   }
 
   /**
@@ -203,6 +219,30 @@ class SearchEngine {
       if (COM_OPTS.regex(record[field].toLowerCase(), val.toLowerCase())) return true;
       return false;
     }
+  }
+
+  /**
+   * Sorts Data
+   * @param {array} records 
+   * @param {object} sortObj 
+   */
+  applySort(records, sortObj) {
+    const { field, order } = sortObj;
+    /**
+     * sort field is not one of the set sort fields
+     * return records without any sort being applied
+     */
+    if (this.sortFields.indexOf(field) === -1) return records;
+
+    /**
+     * Default sort order is asc
+     */
+    const sortOrder = this.sortOrders[order] || this.sortOrders.ASC;
+    if (this.fields[field].type === this.fieldTypes.STRING)
+      return sort.strSort(records, field, sortOrder);
+
+    if (this.fields[field].type === this.fieldTypes.NUMBER)
+      return sort.numSort(records, field, sortOrder);
   }
 }
 

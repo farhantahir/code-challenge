@@ -35,7 +35,8 @@ class HotelsController {
         date
       },
       {
-        sort_field: sort_order
+        field: sort_field,
+        order: sort_order
       }
     );
     res.json({ hotels });

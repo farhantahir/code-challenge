@@ -13,13 +13,14 @@ class HotelsSearch {
    */
   constructor() {
     this.searchEngine = new SearchEngine();
-    const { STRING, NUMBER, ARRAY_OF_OBJECTS } = this.searchEngine.fieldTypes;
+    const { STRING, NUMBER, ARRAY_OF_OBJECTS } = this.searchEngine.fieldTypes;    
     this.fields = {
       name: { type: STRING },
       city: { type: STRING },
       price: { type: NUMBER },
       availability: { type: ARRAY_OF_OBJECTS, multiValue: true }
     };
+    this.sortFields = ['name', 'price'];
     this.setSearchEngineFields();
   }
 
@@ -28,6 +29,7 @@ class HotelsSearch {
    */
   setSearchEngineFields() {
     this.searchEngine.setFields(this.fields);
+    this.searchEngine.setSortFields(this.sortFields);
   }
 
   /**
@@ -43,11 +45,11 @@ class HotelsSearch {
    * Searches hotels based on filters.
    * @returns {Promise}
    */
-  async search(filters) {
-    const prepareFilters = this.prepareFilters(filters);
+  async search(filters, sort) {
+    const prepareFilters = this.prepareFilters(filters);    
     const hotels = await this.fetchHotels();
     this.searchEngine.addData(hotels);
-    return this.searchEngine.search(prepareFilters);
+    return this.searchEngine.search(prepareFilters, sort);
   }
 
   prepareFilters(filters) {
