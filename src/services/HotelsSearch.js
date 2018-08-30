@@ -43,41 +43,90 @@ class HotelsSearch {
    * Searches hotels based on filters.
    * @returns {Promise}
    */
-  async search() {
-    /**
-     * Following filters are only for testing and runing
-     * further code
-     */
-    const OPTS = this.searchEngine.OPTS;
-    const testFilters = {
-      name: {
-        opt: OPTS.regex,
-        val: 'One'
-      },
-      city: {
-        opt: OPTS.eq,
-        val: 'dubai'
-      },
-      price: {
-        opt: OPTS.btwe,
-        val: [7, 200]
-      },
-      availability: {
-        from: {
-          opt: OPTS.eq,
-          val: '10-10-2020'
-        },
-        to: {
-          opt: OPTS.eq,
-          val: '15-10-2020'
-        }
-      }
-    };
+  async search(filters) {
+    const prepareFilters = this.prepareFilters(filters);
     const hotels = await this.fetchHotels();
     this.searchEngine.addData(hotels);
-    const filteredHotes = this.searchEngine.search(testFilters);
-    console.log(filteredHotes, 'hotels')
-    return filteredHotes;
+    return this.searchEngine.search(prepareFilters);
+  }
+
+  prepareFilters(filters) {
+    const preparedFilters = {};
+    const OPTS = this.searchEngine.OPTS;
+
+    /**
+     * Preparing Hotel Name filter
+     */
+    if (filters['name']) {
+      preparedFilters['name'] = {
+        opt: OPTS.regex,
+        val: filters['name']
+      };
+    }
+
+    /**
+     * Preparing Hotel City filter
+     */
+    if (filters['city']) {
+      preparedFilters['city'] = {
+        opt: OPTS.eq,
+        val: filters['city']
+      };
+    }
+
+    /**
+     * Preparing Hotel Price filter
+     */
+    if (filters['price']) {
+      /**
+       * Split price by : if more than two values like 100:200 are provided
+       * Run range filter otherwise run greater filter
+       */
+      const priceFilter = filters['price'].split(':');
+      if (priceFilter.length > 1) {
+        preparedFilters['price'] = {
+          opt: OPTS.btwe,
+          val: [
+            priceFilter[0],
+            priceFilter[1]
+          ]
+        };
+      } else {
+        preparedFilters['price'] = {
+          opt: OPTS.gt,
+          val: priceFilter[0]
+        };
+      }
+    }
+
+    if (filters['date']) {
+      /**
+       * Split date by : if more than two values like 10-10-2020:15-10-2020 are provided
+       * Run range filter otherwise run greater filter
+       */
+      const dateFilter = filters['date'].split(':');
+      if (dateFilter.length > 1) {
+        preparedFilters['availability'] = {
+          from: {
+            opt: OPTS.eq,
+            val: dateFilter[0]
+          },
+          to: {
+            opt: OPTS.eq,
+            val: dateFilter[1]
+          },
+        };
+      } else {
+        preparedFilters['availability'] = {
+          from: {
+            opt: OPTS.gt,
+            val: dateFilter[0]
+          }
+        };
+      }
+    }
+
+    return preparedFilters;
   }
 }
 

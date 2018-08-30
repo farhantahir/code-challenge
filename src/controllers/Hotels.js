@@ -19,8 +19,26 @@ class HotelsController {
    * @param {object} res 
    */
   async search(req, res) {
-    await this.hotelsSearch.search();
-    res.json({ status: true });
+    const {
+      name,
+      city,
+      price,
+      date,
+      sort_field,
+      sort_order
+    } = req.query;
+    const hotels = await this.hotelsSearch.search(
+      {
+        name,
+        city,
+        price,
+        date
+      },
+      {
+        sort_field: sort_order
+      }
+    );
+    res.json({ hotels });
   }
 
 }
