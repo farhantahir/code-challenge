@@ -83,7 +83,7 @@ class HotelsSearch {
        * Run range filter otherwise run greater filter
        */
       const priceFilter = filters['price'].split(':');
-      if (priceFilter[0] && preparedFilter[1]) {
+      if (priceFilter[0] && priceFilter[1]) {
         preparedFilters['price'] = {
           opt: OPTS.btwe,
           val: [
