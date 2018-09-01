@@ -24,27 +24,6 @@ const data = [
       { from: '25-10-2020', to: '10-11-2020' },
       { from: '05-12-2020', to: '18-12-2020' }
     ]
-  },
-  {
-    name: 'Le Meridien',
-    price: 89.6,
-    city: 'london',
-    availability: [
-      { from: '01-10-2020', to: '12-10-2020' },
-      { from: '05-10-2020', to: '10-11-2020' },
-      { from: '05-12-2020', to: '28-12-2020' }
-    ]
-  },
-  {
-    name:
-      'Golden Tulip',
-    price: 109.6,
-    city: 'paris',
-    availability: [
-      { from: '04-10-2020', to: '17-10-2020' },
-      { from: '16-10-2020', to: '11-11-2020' },
-      { from: '01-12-2020', to: '09-12-2020' }
-    ]
   }
 ];
 
@@ -65,13 +44,7 @@ describe('Search Engine service test', () => {
    * Test setFields of searchEngine
    */
   test('Test setFields method of searchEngine', () => {
-    
-    const expected = Object.keys(fields).reduce((obj, fieldName) => {
-      const { type, multiValue } = fields[fieldName];
-      obj[fieldName] = new Field(fieldName, type, multiValue);
-      return obj;
-    }, {});
-
+    const expected = Field.createFields(fields);
     expect(searchEngine.setFields(fields)).toMatchObject(expected);
   });
 

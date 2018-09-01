@@ -18,6 +18,19 @@ class Field {
   }
 
   /**
+   * Creates Field objects
+   * @param {object} fields 
+   * @returns {array}
+   */
+  static createFields(fields) {
+    return Object.keys(fields).reduce((obj, fieldName) => {
+      const { type, multiValue } = fields[fieldName];
+      obj[fieldName] = new this(fieldName, type, multiValue);
+      return obj;
+    }, {});
+  }
+
+  /**
    * String representation of the IndexField
    */
   toString() {

@@ -39,16 +39,12 @@ class SearchEngine {
   }
 
   /**
-   * Creates Field objects
+   * Creates Field objects using static createFields method of Field class
    * @param {object} fields
    * @returns {array}
    */
   createFields(fields) {
-    return Object.keys(fields).reduce((obj, fieldName) => {
-      const { type, multiValue } = fields[fieldName];
-      obj[fieldName] = new Field(fieldName, type, multiValue);
-      return obj;
-    }, {});
+    return Field.createFields(fields);
   }
 
   /**
