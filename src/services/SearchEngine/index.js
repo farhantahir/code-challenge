@@ -34,12 +34,21 @@ class SearchEngine {
    * @param {object} fields Object of fields { fieldName:{} }  object
    */
   setFields(fields = {}) {
-    this.fields = Object.keys(fields).reduce((obj, fieldName) => {
+    this.fields = this.createFields(fields);
+    return this.fields;
+  }
+
+  /**
+   * Creates Field objects
+   * @param {object} fields
+   * @returns {array}
+   */
+  createFields(fields) {
+    return Object.keys(fields).reduce((obj, fieldName) => {
       const { type, multiValue } = fields[fieldName];
       obj[fieldName] = new Field(fieldName, type, multiValue);
       return obj;
     }, {});
-    return this.fields;
   }
 
   /**
