@@ -1,4 +1,4 @@
-const { strSort, numSort } = require('./sort');
+const { strSort, numSort } = require('../sort');
 
 const data = [
   { "name": "Rotana Hotel", "price": 80.6 },
@@ -6,7 +6,7 @@ const data = [
 ];
 
 
-describe('sort objects', () => {
+describe('sort array of objects by string or number type field', () => {
 
   /**
    * Sorts array of objects by a string field in asc order
