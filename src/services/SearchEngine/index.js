@@ -39,6 +39,7 @@ class SearchEngine {
       obj[fieldName] = new Field(fieldName, type, multiValue);
       return obj;
     }, {});
+    return this.fields;
   }
 
   /**
@@ -47,6 +48,7 @@ class SearchEngine {
    */
   setSortFields(fields = []) {
     this.sortFields = fields;
+    return this.sortFields;
   }
 
   /**
@@ -54,7 +56,8 @@ class SearchEngine {
    * @param {array} data
    */
   addData(records) {
-    return this.records = records;
+    this.records = records;
+    return this.records;
   }
 
   /**
