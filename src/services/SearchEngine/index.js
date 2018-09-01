@@ -119,7 +119,7 @@ class SearchEngine {
   matchNestedRecord(records, filter) {
     return records.find(
       rec => {
-        let isMatch = false;
+        let isMatch = true;
         for (let nestedFilterKey of Object.keys(filter)) {
           const nestedFilter = filter[nestedFilterKey];
           const nestedMatch = this.applyFilters(nestedFilterKey, nestedFilter, rec);
