@@ -43,8 +43,8 @@ describe('Testing Comparison Operators of Search Engien', () => {
   test('Regex Operator', () => {
     expect(
       COM_OPTS.regex(
-        'Hotel One'.toLowerCase(),
-        'one'.toLowerCase()
+        'Hotel One',
+        'one'
       )
     ).toBeTruthy();
   });

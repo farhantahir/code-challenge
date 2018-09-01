@@ -7,7 +7,7 @@ const COM_OPTS = {
   'lt': (a, b) => a < b,
   'btw': (a, v1, v2) => a > v1 && a < v2,
   'btwe': (a, v1, v2) => a >= v1 && a <= v2,
-  'regex': (a, b) => a.includes(b) // Need to make it better
+  'regex': (a, b) => a.toLowerCase().includes(b.toLowerCase()) // Need to make it better
 };
 
 module.exports = COM_OPTS;

@@ -77,79 +77,39 @@ class SearchEngine {
    */
   filterRecord(filters) {
     const fields = this.fields;
+    const { STRING, NUMBER, ARRAY_OF_OBJECTS } = this.fieldTypes;
+
     return (record) => {
       let isMatch = true;
-      for (let field of Object.keys(filters)) {
-        /**
-         * If field is not defined already 
-         * or 
-         * It is not a Field object don't apply filters
-         */
-        if (!fields[field] || !fields[field] instanceof Field) continue;
-
+      for (let filterKey of Object.keys(filters)) {
+        if (!fields[filterKey] || !fields[filterKey] instanceof Field) continue;
         let match = true;
+        const field = fields[filterKey];
+        const filter = filters[field];
 
-        /**
-         * If field type is STRING or NUMBER simply run applyFilter on value and field
-         */
-        if (
-          fields[field].type === this.fieldTypes.STRING
-          || fields[field].type === this.fieldTypes.NUMBER
-        ) {
-          match = this.applyFilters(field, filters, record);
+        if (field.type === STRING || field.type === NUMBER) {
+          match = this.applyFilters(field, filter, record);
         }
-
-        /**
-         * If filed type is ARRAY_OF_OBJECTS
-         * Then filter format is as follow.
-         * availability: {
-         *  from: {
-         *    opt: OPTS.eq,
-         *    val: '20-10-2019'
-         *  },
-         *  to:{
-         *    opt: OPTS.eq,
-         *    val: '20-12-2019'
-         *  }
-         * }
-         * 
-         * Get nested filds array using Object.keys iterate through each filterKey
-         * get nested record that is array of objects
-         * Run each record through applyFilter
-         * break if nestedMatch is true
-         * TODO: As breaking the loop if one record found, this should be a config on filter object
-         * like match: single or multi
-         */
-        if (fields[field].type === this.fieldTypes.ARRAY_OF_OBJECTS) {
-          const nestedFilters = filters[field];
-          const nestedRecords = record[field];
-          const nestedMatch = nestedRecords.find((nestedRecord) => {
-            let isNestedMatch = true;
-            for (let nestedField of Object.keys(nestedFilters)) {
-              const nestedMatch = this.applyFilters(nestedField, nestedFilters, nestedRecord);
-              if (!nestedMatch) {
-                isNestedMatch = false;
-                break;
+        
+        if (field.type === ARRAY_OF_OBJECTS) {
+          const records = record[field];
+          match = records.find(
+            rec => {
+              for (let nestedFilterKey of Object.keys(filter)) {
+                const nestedFilter = filter[nestedFilterKey];
+                const nestedMatch = this.applyFilters(nestedFilterKey, nestedFilter, rec);
+                if (nestedMatch) return true;
               }
+              return false;
             }
-            return isNestedMatch;
-          });
-
-          /**
-           * If one match is found on nested objects set match = true
-           */
-          if (!nestedMatch)
-            match = false;
-
+          );
         }
 
-        if (match)
-          continue;
+        if (match) continue;
         else {
           isMatch = false;
           break;
         }
-
       }
       return isMatch;
     };
@@ -158,57 +118,31 @@ class SearchEngine {
   /**
    * Applies provided filters on a given field and record.
    * @param {string} field
-   * @param {object} filters
+   * @param {object} filter
    * @param {object} record
    */
-  applyFilters(field, filters, record) {
-    /**
-     * Assumption:
-     * If any of the following filter mathces set isMatch = true and  return
-     */
+  applyFilters(field, filter, record) {
     const OPTS = this.OPTS;
-    const { opt, val } = filters[field];
+    const { opt, val } = filter;
     let match = false;
 
-    /**
-     * If filter operator is set to eq
-     */
     if (opt === OPTS.eq && COM_OPTS.eq(val, record[field]))
       match = true;
 
-    /**
-     * If filter operator is set to gt
-     */
     if (opt === OPTS.gt && COM_OPTS.gt(record[field], val))
       match = true;
 
-    /**
-     * If filter operator is set to lt
-     */
     if (opt === OPTS.lt && COM_OPTS.lt(record[field], val))
       match = true;
 
-    /**
-     * If filter operator is set to btw
-     */
     if (opt === OPTS.btw && COM_OPTS.btw(record[field], val[0], val[1]))
       match = true;
 
-    /**
-     * If filter operator is set to btwe
-     */
     if (opt === OPTS.btwe && COM_OPTS.btwe(record[field], val[0], val[1]))
       match = true;
 
-    /**
-     * If filter operator is set to regex
-     */
-    if (
-      opt === OPTS.regex
-      && COM_OPTS.regex(record[field].toLowerCase(), val.toLowerCase())
-    ) {
+    if (opt === OPTS.regex && COM_OPTS.regex(record[field], val))
       match = true;
-    }
 
     return match;
   }
