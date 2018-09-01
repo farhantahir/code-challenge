@@ -52,7 +52,6 @@ describe('Search Engine service test', () => {
    * Test setSortFields of searchEngine
    */
   test('Test setSortFields method of searchEngine', () => {
-    const expected = sortFields;
     expect(searchEngine.setSortFields(sortFields)).toEqual(expect.arrayContaining(sortFields));
   });
 
@@ -60,8 +59,7 @@ describe('Search Engine service test', () => {
    * Test addData of search Engine
    */
   test('Test addData method of searchEngine', () => {
-    const expected = data;
-    expect(searchEngine.addData(data)).toEqual(expect.arrayContaining(expected));
+    expect(searchEngine.addData(data)).toEqual(expect.arrayContaining(data));
   });
 
   /**

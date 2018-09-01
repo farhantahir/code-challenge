@@ -95,19 +95,10 @@ class SearchEngine {
         if (field.type === STRING || field.type === NUMBER) {
           match = this.applyFilters(field, filter, record);
         }
-        
+
         if (field.type === ARRAY_OF_OBJECTS) {
           const records = record[field];
-          match = records.find(
-            rec => {
-              for (let nestedFilterKey of Object.keys(filter)) {
-                const nestedFilter = filter[nestedFilterKey];
-                const nestedMatch = this.applyFilters(nestedFilterKey, nestedFilter, rec);
-                if (nestedMatch) return true;
-              }
-              return false;
-            }
-          );
+          match = this.matchNestedRecord(records, filter);
         }
 
         if (match) continue;
@@ -121,6 +112,27 @@ class SearchEngine {
   }
 
   /**
+   * Matches array of nested records on object field
+   * @param {*} records 
+   * @returns {boolean}
+   */
+  matchNestedRecord(records, filter) {
+    return records.find(
+      rec => {
+        let isMatch = false;
+        for (let nestedFilterKey of Object.keys(filter)) {
+          const nestedFilter = filter[nestedFilterKey];
+          const nestedMatch = this.applyFilters(nestedFilterKey, nestedFilter, rec);
+          if (!nestedMatch) {
+            isMatch = false;
+            break;
+          };
+        }
+        return isMatch;
+      }
+    );
+  }
+  /**
    * Applies provided filters on a given field and record.
    * @param {string} field
    * @param {object} filter
@@ -129,27 +141,8 @@ class SearchEngine {
   applyFilters(field, filter, record) {
     const OPTS = this.OPTS;
     const { opt, val } = filter;
-    let match = false;
-
-    if (opt === OPTS.eq && COM_OPTS.eq(val, record[field]))
-      match = true;
-
-    if (opt === OPTS.gt && COM_OPTS.gt(record[field], val))
-      match = true;
-
-    if (opt === OPTS.lt && COM_OPTS.lt(record[field], val))
-      match = true;
-
-    if (opt === OPTS.btw && COM_OPTS.btw(record[field], val[0], val[1]))
-      match = true;
-
-    if (opt === OPTS.btwe && COM_OPTS.btwe(record[field], val[0], val[1]))
-      match = true;
-
-    if (opt === OPTS.regex && COM_OPTS.regex(record[field], val))
-      match = true;
-
-    return match;
+    const values = Array.isArray(val) ? val : [val];
+    return OPTS[opt] && COM_OPTS[opt](record[field], ...values);
   }
 
   /**
