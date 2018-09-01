@@ -1,5 +1,6 @@
 # Tajawal Back-End Code Challenge Solution
 
+[![Build Status](https://travis-ci.com/farhantahir/code-challenge.png?branch=master)](https://travis-ci.com/farhantahir/code-challenge)
 
 # Table of Contents
 * [Technologies](#technologies)
