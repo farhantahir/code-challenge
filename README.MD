@@ -1,6 +1,9 @@
 # Tajawal Back-End Code Challenge Solution
 
-[![Build Status](https://travis-ci.com/farhantahir/code-challenge.png?branch=master)](https://travis-ci.com/farhantahir/code-challenge)
+[![Build Status](https://travis-ci.com/farhantahir/code-challenge.png?branch=master)](https://travis-ci.com/farhantahir/code-challenge) 
+[![Maintainability](https://api.codeclimate.com/v1/badges/94fd9f91055d5cd54788/maintainability)](https://codeclimate.com/github/farhantahir/code-challenge/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/94fd9f91055d5cd54788/test_coverage)](https://codeclimate.com/github/farhantahir/code-challenge/test_coverage)
+
+
 
 # Table of Contents
 * [Technologies](#technologies)
