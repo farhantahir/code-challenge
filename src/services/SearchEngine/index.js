@@ -166,62 +166,51 @@ class SearchEngine {
      * Assumption:
      * If any of the following filter mathces set isMatch = true and  return
      */
-
     const OPTS = this.OPTS;
     const { opt, val } = filters[field];
+    let match = false;
 
     /**
      * If filter operator is set to eq
      */
-    if (opt === OPTS.eq) {
-      if (COM_OPTS.eq(val, record[field])) return true;
-      return false;
-    }
-
+    if (opt === OPTS.eq && COM_OPTS.eq(val, record[field]))
+      match = true;
 
     /**
      * If filter operator is set to gt
      */
-    if (opt === OPTS.gt) {
-      if (COM_OPTS.gt(record[field], val)) return true;
-      return false;
-    }
+    if (opt === OPTS.gt && COM_OPTS.gt(record[field], val))
+      match = true;
 
     /**
      * If filter operator is set to lt
      */
-    if (opt === OPTS.lt) {
-      if (COM_OPTS.lt(record[field], val)) return true;
-      return false;
-    }
-
-
+    if (opt === OPTS.lt && COM_OPTS.lt(record[field], val))
+      match = true;
 
     /**
      * If filter operator is set to btw
      */
-    if (opt === OPTS.btw) {
-      if (COM_OPTS.btw(record[field], val[0], val[1])) return true;
-      return false;
-    }
-
+    if (opt === OPTS.btw && COM_OPTS.btw(record[field], val[0], val[1]))
+      match = true;
 
     /**
      * If filter operator is set to btwe
      */
-    if (opt === OPTS.btwe) {
-      if (COM_OPTS.btwe(record[field], val[0], val[1])) return true;
-      return false;
-    }
-
+    if (opt === OPTS.btwe && COM_OPTS.btwe(record[field], val[0], val[1]))
+      match = true;
 
     /**
      * If filter operator is set to regex
      */
-    if (opt === OPTS.regex) {
-      if (COM_OPTS.regex(record[field].toLowerCase(), val.toLowerCase())) return true;
-      return false;
+    if (
+      opt === OPTS.regex
+      && COM_OPTS.regex(record[field].toLowerCase(), val.toLowerCase())
+    ) {
+      match = true;
     }
+
+    return match;
   }
 
   /**
