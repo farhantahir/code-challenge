@@ -38,7 +38,7 @@ describe('sort array of objects by string or number type field', () => {
       { "name": "Rotana Hotel", "price": 80.6 },
       { "name": "Media One Hotel", "price": 102.2 }
     ];
-    expect(strSort(data, 'name')).toEqual(expect.arrayContaining(expected));
+    expect(numSort(data, 'name')).toEqual(expect.arrayContaining(expected));
   });
 
   /**
@@ -49,7 +49,7 @@ describe('sort array of objects by string or number type field', () => {
       { "name": "Media One Hotel", "price": 102.2 },
       { "name": "Rotana Hotel", "price": 80.6 }
     ];
-    expect(strSort(data, 'name', 'desc')).toEqual(expect.arrayContaining(expected));
+    expect(numSort(data, 'name', 'desc')).toEqual(expect.arrayContaining(expected));
   });
 
 });
