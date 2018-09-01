@@ -19,8 +19,8 @@
 * Node.js (v10.9.0)
 * Express Framework
 * Jest
-* TravisCI
-* Codeclimate
+* Travis CI
+* Code Climate
 
 # Dependancies
 * config
