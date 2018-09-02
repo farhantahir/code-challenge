@@ -30,7 +30,7 @@ beforeAll(() => {
   jest.spyOn(hotelSearch, 'fetchHotels').mockImplementation(() => DATA);
 });
 
-describe('Test Hotel Service', () => {
+describe('Test Hotel Search Service', () => {
   const filters = {
     name: 'hotel',
     city: 'dubai',

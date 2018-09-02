@@ -43,7 +43,7 @@
 git clone https://github.com/farhantahir/code-challenge.git
 ```
 
-2) Rename `.env.example` to `.env`
+2) Copy `.env.example` and rename it to `.env`
 
 3) Install Dependancies.
 ```
@@ -76,7 +76,7 @@ GET /hotels/search
  * `name`: A part of hotel name matches using `.includes`
  * `city`: A city name that will use `Exact Match`.
  * `price`: A range of price like `100:500` or `1000:2000`. It uses a range filter.
- * `date`: A range of date as `10-12-2020:15-12-2020`. I uses a range filter.
+ * `date`: A range of date as `10-12-2020:15-12-2020`. It uses a range filter.
  * `sort_field`: Field name to run sort against.
  * `sort_order`: Order of the sorting `asc/desc`
 
